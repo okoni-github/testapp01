@@ -1,63 +1,29 @@
-import {  View, Text,StyleSheet } from "react-native";
+import React from 'react';
+import {  View,StyleSheet } from "react-native";
 
+import Header from '../components/Haeder';
+import MemoListItem from '../components/MemoListItem';
+import CircleButton from '../components/circleButton';
 
 const Index = ():JSX.Element => {
   return(
     <View style={styles.container}>
+    < Header />
       <View>
-        <View>
-          <Text>家計簿 App</Text>
-          <Text>ログアウト</Text>
-        </View>
+        <MemoListItem />
+        <MemoListItem />
+        <MemoListItem />
       </View>
-      <View>
-
-        <View>
-          <View>
-            <Text>買い物リスト</Text>
-            <Text>2023年10月1日 10:00</Text>
-          </View>
-          <View>
-            <Text>X</Text>
-          </View>
-        </View>
-
-        <View>
-          <View>
-            <Text>買い物リスト</Text>
-            <Text>2023年10月1日 10:00</Text>
-          </View>
-          <View>
-            <Text>X</Text>
-          </View>
-        </View>
-
-        <View>
-          <View>
-            <Text>買い物リスト</Text>
-            <Text>2023年10月1日 10:00</Text>
-          </View>
-          <View>
-            <Text>X</Text>
-          </View>
-        </View>
-
-      </View>
-
-      <View>
-        <Text>+</Text>
-      </View>
-
+      <CircleButton>+</CircleButton>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
+    flex:1, //画面いっぱいに要素を広げる
+    backgroundColor: '#ffffff',
+  },
 })
 
 export default Index
