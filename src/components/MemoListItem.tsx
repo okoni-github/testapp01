@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {MaterialIcons } from '@expo/vector-icons';
 
 const memoListItem = (): JSX.Element => {
     return(
@@ -8,9 +9,9 @@ const memoListItem = (): JSX.Element => {
                 <Text style={styles.memoListItemTitle}>買い物リスト</Text>
                 <Text style={styles.memoListItemDate}>2023年10月1日 10:00</Text>
             </View>
-            <View>
-                <Text>X</Text>
-            </View>
+            <TouchableOpacity>
+                <MaterialIcons name='delete' size={26}  color='#848484'/>
+            </TouchableOpacity>
         </View>
     )
 }
