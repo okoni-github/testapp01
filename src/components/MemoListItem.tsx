@@ -1,18 +1,23 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Link } from 'expo-router';
+
 import {MaterialIcons } from '@expo/vector-icons';
 
 const memoListItem = (): JSX.Element => {
     return(
-        <View style={styles.memoListItem}>
-            <View>
-                <Text style={styles.memoListItemTitle}>買い物リスト</Text>
-                <Text style={styles.memoListItemDate}>2023年10月1日 10:00</Text>
-            </View>
-            <TouchableOpacity>
-                <MaterialIcons name='delete' size={26}  color='#848484'/>
+        <Link href='/memo/detail' asChild>
+            <TouchableOpacity style={styles.memoListItem}>
+                <View>
+                    <Text style={styles.memoListItemTitle}>買い物リスト</Text>
+                    <Text style={styles.memoListItemDate}>2023年10月1日 10:00</Text>
+                </View>
+                <TouchableOpacity>
+                    <MaterialIcons name='delete' size={26}  color='#848484'/>
+                </TouchableOpacity>
             </TouchableOpacity>
-        </View>
+        </Link>
+
     )
 }
 

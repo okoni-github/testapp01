@@ -1,21 +1,34 @@
 import React from 'react';
-import { View,StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { router, useNavigation } from 'expo-router';
+import { useEffect } from 'react';
 
-import Header from '@/src/components/Haeder';
-import MemoListItem from '@/src/components/MemoListItem';
-import CircleButton from '@/src/components/circleButton';
+import MemoListItem from '../../components/MemoListItem';
+import CircleButton from '../../components/circleButton';
 import Icon from '../../components/icon'
+import LogOutButton from '../../components/LogOutButton';
+
+const handlePress = (): void => {
+  router.push('/memo/create')
+}
 
 const List = ():JSX.Element => {
+  // use〇〇はReactコンポーネントの直下に置く
+  const navigation = useNavigation()
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => { return <LogOutButton /> }
+    })
+  }, [])
+
   return(
     <View style={styles.container}>
-    < Header />
       <View>
         <MemoListItem />
         <MemoListItem />
         <MemoListItem />
       </View>
-      <CircleButton>
+      <CircleButton onPress={handlePress}>
         <Icon name='plus' size={40} color='#ffffff' />
       </CircleButton>
     </View>
