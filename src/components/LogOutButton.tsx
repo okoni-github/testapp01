@@ -7,14 +7,29 @@ import { router } from 'expo-router';
 import { auth } from '../config';
 
 const handlePress = (): void => {
-    // サインアウト
-    signOut(auth)
-        .then(() => {
-            router.replace('/auth/log_in')
-        })
-        .catch(() => {
-            Alert.alert("ログアウトが失敗しました")
-        })
+
+    Alert.alert('ログアウトします', 'よろしいですか？', [
+    {
+        text: 'キャンセル'
+    },
+    {
+        text: 'ログアウトする',
+        // 赤文字で表示する ※iosのみ
+        style: 'destructive',
+        // ログアウトするを選択した場合にログアウト処理を実行する
+        onPress: () => {
+            // サインアウト
+            signOut(auth)
+                .then(() => {
+                    router.replace('/auth/log_in')
+                })
+                .catch(() => {
+                    Alert.alert("ログアウトが失敗しました")
+                })
+        }
+    }
+])
+
 }
 
 const LogOutButton = (): JSX.Element => {

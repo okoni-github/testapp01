@@ -12,7 +12,6 @@ import Button from '../../components/Button';
 
 const handlePress = (email: string, password: string): void => {
     // 会員登録
-    console.log(email, password)
     createUserWithEmailAndPassword(auth, email, password)
         // 成功
         .then((userCredential) => {
@@ -25,7 +24,6 @@ const handlePress = (email: string, password: string): void => {
             console.log(code, message)
             Alert.alert(message)
         })
-
 }
 
 const SignUp = ():JSX.Element => {
@@ -55,16 +53,15 @@ const SignUp = ():JSX.Element => {
                 />
                 <Button label='submit' onPress={() => { handlePress(email, password) }}/>
                 <View style={styles.footer}>
-                    <Text style={styles.footerText}>Already registered?</Text>
+                    <Text style={styles.footerText}>もうすでにアカウントがありますか？</Text>
                     <Link href='/auth/log_in' asChild replace>
                         <TouchableOpacity>
-                            <Text style={styles.footerLink}>Log in.</Text>
+                            <Text style={styles.footerLink}>ここからログイン</Text>
                         </TouchableOpacity>
                     </Link>
                 </View>
             </View>
         </View>
-
     )
 }
 

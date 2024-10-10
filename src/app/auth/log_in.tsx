@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, getAuth, signInAnonymously } from 'firebase/auth';
 
 import Button from '../../components/Button';
 import { auth } from '../../config';
@@ -15,13 +15,27 @@ const handlePress = (email: string, password: string): void => {
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             console.log(userCredential.user.uid)
-            router.replace('/memo/List') //メモリスト画面へ遷移
+            router.replace('/Dashboard/DashBoard') //ダッシュボード画面へ遷移
         })
         .catch((error) => {
             const { code, message } = error
             console.log(code, message)
             Alert.alert(message)
         })
+}
+
+const gestHandlePress = (): void => {
+    console.log('hello!')
+    const getauth = getAuth();
+        signInAnonymously(getauth)
+            .then((userCredential) => {
+            console.log(userCredential.user.uid)
+            router.replace('/Dashboard/DashBoard') //ダッシュボード画面へ遷移
+            })
+            .catch((error) => {
+                console.log(error)
+                Alert.alert('ログインに失敗しました')
+            });
 }
 
 const LogIn = ():JSX.Element => {
@@ -50,11 +64,12 @@ const LogIn = ():JSX.Element => {
                     textContentType='password'
                 />
                 <Button label='submit' onPress={() => { handlePress(email, password) }} />
+                <Button label='ゲストとしてログイン' onPress={gestHandlePress}/>
                 <View style={styles.footer}>
-                    <Text style={styles.footerText}>Not registered?</Text>
+                    <Text style={styles.footerText}>アカウントがありませんか？</Text>
                     <Link href='/auth/sign_up' asChild replace>
                         <TouchableOpacity>
-                            <Text style={styles.footerLink}>Sign up here!</Text>
+                            <Text style={styles.footerLink}>ここからサインアップ</Text>
                         </TouchableOpacity>
                     </Link>
 
