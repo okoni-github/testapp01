@@ -53,9 +53,23 @@ const saveAssetTrendsData = (authUser: User) => {
             const labels: string[] = [];
             const dataPoints: number[] = [];
 
-            for (let i = 0; i <= 100 - age; i++) {
-              labels.push(`${i + age}歳`);
+            // 年齢データ（例: 32歳6ヶ月であれば ageYears = 32, ageMonths = 6）
+            const ageYears = 32;  // 現在の年齢（年）
+            const ageMonths = 6;  // 現在の年齢（月）
+            
+            // 現在の年齢から100歳0ヶ月までデータを作成
+            for (let i = ageYears * 12 + ageMonths; i <= 100 * 12; i++) {
+              // 年と月を計算
+              const years = Math.floor(i / 12);
+              const months = i % 12;
+              
+              // ラベルを追加 (例: 32歳6ヶ月, 100歳0ヶ月)
+              labels.push(`${years}歳${months}ヶ月`);
+              
+              // 資産データを追加
               dataPoints.push(asset);
+              
+              // 月毎の増加分を資産に追加
               asset += monthlyNetIncrease;
             }
 

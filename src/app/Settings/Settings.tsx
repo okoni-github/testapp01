@@ -17,8 +17,8 @@ import SmallButton from '@/src/components/smallButton';
 import LargeButton from '@/src/components/largeButton';
 import LogOutButton from '@/src/components/LogOutButton';
 import AccountButton from '@/src/components/AccountButton';
-import { AssetTrendsData } from '@/types/AssetTrendsData';
 import saveAssetTrendsData from '../helpers/saveAssetTrendsData';
+import KeyboardAccessory from '@/src/components/KeyboardAccessory';
 
 const Settings = ():JSX.Element => {
   const [visible, setVisible] = useState(false);
@@ -191,6 +191,7 @@ const Settings = ():JSX.Element => {
                       onChangeText={(text) => { setTempAge(Number(text)) }}
                       placeholder="歳"
                       keyboardType="numeric"  // 追加: 数値入力用のキーボードを表示
+                      inputAccessoryViewID="globalAccessoryID"  // InputAccessoryViewと関連付け
                       />
                       <SmallButton onPress={() => {
                         handlePress(
@@ -199,7 +200,9 @@ const Settings = ():JSX.Element => {
                           tempAge,
                           setTempAge,
                           'ageId'
-                        )}} label='更新' />
+                        )}} label='更新' 
+                      />
+                      <KeyboardAccessory />
                     </View>
                   </View>
                 </View>
@@ -217,6 +220,7 @@ const Settings = ():JSX.Element => {
                       onChangeText={(text) => { setTempAssetAmount(Number(text)) }}
                       placeholder="¥"
                       keyboardType="numeric"  // 追加: 数値入力用のキーボードを表示
+                      inputAccessoryViewID="globalAccessoryID"  // InputAccessoryViewと関連付け
                       />
                       <LargeButton onPress={() => {
                         handlePress(
@@ -225,7 +229,9 @@ const Settings = ():JSX.Element => {
                           tempAssetAmount,
                           setTempAssetAmount,
                           'assetAmountId'
-                        )}} label='更新' width={48}/>
+                        )}} label='更新' width={48}
+                      />
+                      <KeyboardAccessory />
                     </View>
                   </View>
                 </View>
@@ -245,6 +251,7 @@ const Settings = ():JSX.Element => {
                       onChangeText={(text) => { setTempIncomeForecast(Number(text)) }}
                       placeholder="¥"
                       keyboardType="numeric"  // 追加: 数値入力用のキーボードを表示
+                      inputAccessoryViewID="globalAccessoryID"  // InputAccessoryViewと関連付け
                       />
                       <SmallButton onPress={() => {
                         handlePress(
@@ -253,7 +260,9 @@ const Settings = ():JSX.Element => {
                           tempIncomeForecast,
                           setTempIncomeForecast,
                           'incomeForecastId'
-                        )}} label='登録' />
+                        )}} label='登録'
+                      />
+                      <KeyboardAccessory />
                     </View>
                   </View>
                 </View>
@@ -271,6 +280,7 @@ const Settings = ():JSX.Element => {
                       onChangeText={(text) => { setTempExpendituresForecast(Number(text)) }}
                       placeholder="¥"
                       keyboardType="numeric"  // 追加: 数値入力用のキーボードを表示
+                      inputAccessoryViewID="globalAccessoryID"  // InputAccessoryViewと関連付け
                       />
                       <SmallButton onPress={() => {
                         handlePress(
@@ -281,6 +291,7 @@ const Settings = ():JSX.Element => {
                           'expendituresForecastId'
                         )}} label='登録'
                       />
+                      <KeyboardAccessory />
                     </View>
                   </View>
                 </View>
@@ -356,6 +367,7 @@ const styles = StyleSheet.create({
     height:24,
     padding: 4,
     width: 160,
+    marginRight: 8,
     borderRadius: 8,
     backgroundColor:'#ffffff'
   },

@@ -20,7 +20,6 @@ const useAdmob = () => {
         rewarded.show();
       }
     );
-
     return () => {
       unsubscribeLoaded();
     };

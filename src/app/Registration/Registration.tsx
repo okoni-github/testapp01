@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import {useState } from 'react';
 import {
   View,
-  Text,
   TextInput,
   StyleSheet,
 } from "react-native";
@@ -12,19 +11,16 @@ import { useNavigation } from 'expo-router';
 import { Provider as PaperProvider, SegmentedButtons, Snackbar } from 'react-native-paper';
 
 import Footer from '../Footer';
-import SmallButton from '@/src/components/smallButton';
 import LogOutButton from '@/src/components/LogOutButton';
 import AccountButton from '@/src/components/AccountButton';
+import LargeButton from '@/src/components/largeButton';
 import { auth, db } from '@/src/config';
 
-import saveAssetTrendsData from '../helpers/saveAssetTrendsData';
+import KeyboardAccessory from '@/src/components/KeyboardAccessory';
 
 const Registration = ():JSX.Element => {
   const [visible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const [incomeActual, setIncomeActual] = useState(0) // 収入実績
-  const [expenditureActual, setExpenditureActual] = useState(0) // 支出実績
 
   const navigation = useNavigation()
   // 画面表示の際に一度だけログアウトボタンを表示する
@@ -34,237 +30,62 @@ const Registration = ():JSX.Element => {
       headerLeft: () => { return <AccountButton /> }
     })
   }, [])
-
-  const handlePressIncomeActual = (): void => {
-  //   if (auth.currentUser === null) { return }
-
-  //   // tempValueが0以上かどうかを確認
-  //   if (Number(incomeActual) < 0) {
-  //     setErrorMessage('0より小さい値は登録できません'); // エラーメッセージを設定
-  //     setVisible(true); // Snackbar を表示するために visible を true に設定
-  //     return; // ここで処理を中断
-  //   }
-
-  //   const incomeActualRef = collection(db, `users/${auth.currentUser.uid}/incomeActual`)
-  //   const assetAmountRef = doc(db, `users/${auth.currentUser.uid}/assetAmount`, 'assetAmountId');
-
-  // // 現在の資産額を取得
-  // getDoc(assetAmountRef)
-  //   .then((doc) => {
-  //     if (doc.exists()) {
-  //       const currentAssetAmount = doc.data().assetAmount;
-
-  //       // 収入額をFireStoreに追加
-  //       addDoc(incomeActualRef, {
-  //         incomeActual,
-  //         updatedAt: Timestamp.fromDate(new Date())
-  //       })
-  //         .then(() => {
-  //           // 資産額を収入額分増加させてFireStoreに更新
-  //           const newAssetAmount = currentAssetAmount + Number(incomeActual);  // 収入額を加算
-  //           setDoc(assetAmountRef, {
-  //             assetAmount: newAssetAmount,
-  //             updatedAt: Timestamp.fromDate(new Date())
-  //           })
-  //           .then(() => {
-  //             if (auth.currentUser === null) { return }
-
-  //             console.log('Asset amount updated successfully!');
-  //             setIncomeActual(1);  // 収入実績の入力フィールドをリセット
-
-  //             saveAssetTrendsData(auth.currentUser);
-
-  //           })
-  //           .catch((error) => {
-  //             console.error('Error updating asset amount:', error);
-  //           });
-  //         })
-  //         .catch((error) => {
-  //           console.error('Error adding income actual:', error);
-  //         });
-  //     } else {
-  //       console.error('No asset amount document found!');
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error fetching asset amount:', error);
-  //   });
-  }
-
-  const handlePressExpenditureActual = (): void => {
-    // if (auth.currentUser === null) { return }
-
-    // // tempValueが0以上かどうかを確認
-    // if (Number(expenditureActual) < 0) {
-    //   setErrorMessage('0より小さい値は登録できません'); // エラーメッセージを設定
-    //   setVisible(true); // Snackbar を表示するために visible を true に設定
-    //   return; // ここで処理を中断
-    // }
-
-    // const expenditureActualRef = collection(db, `users/${auth.currentUser.uid}/expenditureActual`)
-    // const assetAmountRef = doc(db, `users/${auth.currentUser.uid}/assetAmount`, 'assetAmountId');
-
-    // // 現在の資産額を取得
-    // getDoc(assetAmountRef)
-    //   .then((doc) => {
-    //     if (doc.exists()) {
-    //       const currentAssetAmount = doc.data().assetAmount;
-
-    //       // 収入額をFireStoreに追加
-    //       addDoc(expenditureActualRef, {
-    //         expenditureActual,
-    //         updatedAt: Timestamp.fromDate(new Date())
-    //       })
-    //         .then(() => {
-    //           // 資産額を収入額分増加させてFireStoreに更新
-    //           const newAssetAmount = currentAssetAmount - Number(expenditureActual);  // 収入額を加算
-    //           setDoc(assetAmountRef, {
-    //             assetAmount: newAssetAmount,
-    //             updatedAt: Timestamp.fromDate(new Date())
-    //           })
-    //           .then(() => {
-    //             if (auth.currentUser === null) { return }
-
-    //             console.log('Asset amount updated successfully!');
-    //             setExpenditureActual(1);  // 収入実績の入力フィールドをリセット
-
-    //             saveAssetTrendsData(auth.currentUser);
-
-    //           })
-    //           .catch((error) => {
-    //             console.error('Error updating asset amount:', error);
-    //           });
-    //         })
-    //         .catch((error) => {
-    //           console.error('Error adding setExpenditure actual:', error);
-    //         });
-    //     } else {
-    //       console.error('No asset amount document found!');
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching asset amount:', error);
-    //   });
-  }
-
   const [selectedTab, setSelectedTab] = useState('income');
   const [value, setValue] = useState('');
 
-    const handlePress = () => {
-      if (selectedTab === 'income') {
-        if (auth.currentUser === null) { return }
+  const handlePress = () => {
+    if (auth.currentUser === null) { return }
 
-        // tempValueが0以上かどうかを確認
-        if (Number(value) < 0) {
-          setErrorMessage('0より小さい値は登録できません'); // エラーメッセージを設定
-          setVisible(true); // Snackbar を表示するために visible を true に設定
-          return; // ここで処理を中断
+    const transactionsRef = collection(db, `users/${auth.currentUser.uid}/transactions`);
+    const assetAmountRef = doc(db, `users/${auth.currentUser.uid}/assetAmount`, 'assetAmountId');
+
+    // tempValueが0以上かどうかを確認
+    if (Number(value) < 0) {
+      setErrorMessage('0より小さい値は登録できません'); // エラーメッセージを設定
+      setVisible(true); // Snackbar を表示するために visible を true に設定
+      return; // ここで処理を中断
+    }
+
+    // 現在の資産額を取得
+    getDoc(assetAmountRef)
+      .then((docSnapshot) => {
+        if (!docSnapshot.exists()) {
+          console.error('No asset amount document found!');
+          return;
         }
 
-        const incomeActualRef = collection(db, `users/${auth.currentUser.uid}/incomeActual`)
-        const assetAmountRef = doc(db, `users/${auth.currentUser.uid}/assetAmount`, 'assetAmountId');
+      const currentAssetAmount = docSnapshot.data().assetAmount;
+      const transactionType = selectedTab === 'income' ? 'income' : 'expense';
+      const newTransactionAmount = Number(value);
 
-      // 現在の資産額を取得
-      getDoc(assetAmountRef)
-        .then((doc) => {
-          if (doc.exists()) {
-            const currentAssetAmount = doc.data().assetAmount;
+      // トランザクションを FireStore に保存
+      return addDoc(transactionsRef, {
+        amount: newTransactionAmount,
+        type: transactionType,
+        date: Timestamp.fromDate(new Date()),
+        updatedAt: Timestamp.fromDate(new Date())
+      })
+      .then(() => {
+        // 資産額を更新
+        const newAssetAmount = transactionType === 'income'
+          ? currentAssetAmount + newTransactionAmount
+          : currentAssetAmount - newTransactionAmount;
 
-            // 収入額をFireStoreに追加
-            addDoc(incomeActualRef, {
-              incomeActual: value,
-              updatedAt: Timestamp.fromDate(new Date())
-            })
-              .then(() => {
-                // 資産額を収入額分増加させてFireStoreに更新
-                const newAssetAmount = currentAssetAmount + Number(value);  // 収入額を加算
-                setDoc(assetAmountRef, {
-                  assetAmount: newAssetAmount,
-                  updatedAt: Timestamp.fromDate(new Date())
-                })
-                .then(() => {
-                  if (auth.currentUser === null) { return }
-
-                  console.log('Asset amount updated successfully!');
-                  setValue("");  // 収入実績の入力フィールドをリセット
-
-                  saveAssetTrendsData(auth.currentUser);
-
-                })
-                .catch((error) => {
-                  console.error('Error updating asset amount:', error);
-                });
-              })
-              .catch((error) => {
-                console.error('Error adding income actual:', error);
-              });
-          } else {
-            console.error('No asset amount document found!');
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching asset amount:', error);
+        return setDoc(assetAmountRef, {
+          assetAmount: newAssetAmount,
+          updatedAt: Timestamp.fromDate(new Date())
         });
-        console.log('収入が登録されました:', value);
-        // 収入の登録処理
-      } else if (selectedTab === 'expense') {
-        if (auth.currentUser === null) { return }
-
-        // tempValueが0以上かどうかを確認
-        if (Number(value) < 0) {
-          setErrorMessage('0より小さい値は登録できません'); // エラーメッセージを設定
-          setVisible(true); // Snackbar を表示するために visible を true に設定
-          return; // ここで処理を中断
-        }
-
-        const expenditureActualRef = collection(db, `users/${auth.currentUser.uid}/expenditureActual`)
-        const assetAmountRef = doc(db, `users/${auth.currentUser.uid}/assetAmount`, 'assetAmountId');
-
-        // 現在の資産額を取得
-        getDoc(assetAmountRef)
-          .then((doc) => {
-            if (doc.exists()) {
-              const currentAssetAmount = doc.data().assetAmount;
-
-              // 収入額をFireStoreに追加
-              addDoc(expenditureActualRef, {
-                expenditureActual,
-                updatedAt: Timestamp.fromDate(new Date())
-              })
-                .then(() => {
-                  // 資産額を収入額分増加させてFireStoreに更新
-                  const newAssetAmount = currentAssetAmount - Number(value);  // 収入額を加算
-                  setDoc(assetAmountRef, {
-                    assetAmount: newAssetAmount,
-                    updatedAt: Timestamp.fromDate(new Date())
-                  })
-                  .then(() => {
-                    if (auth.currentUser === null) { return }
-
-                    console.log('Asset amount updated successfully!');
-                    setValue("");  // 収入実績の入力フィールドをリセット
-
-                    saveAssetTrendsData(auth.currentUser);
-
-                  })
-                  .catch((error) => {
-                    console.error('Error updating asset amount:', error);
-                  });
-                })
-                .catch((error) => {
-                  console.error('Error adding setExpenditure actual:', error);
-                });
-            } else {
-              console.error('No asset amount document found!');
-            }
-          })
-          .catch((error) => {
-            console.error('Error fetching asset amount:', error);
-          });
-            console.log('支出が登録されました:', value);
-            // 支出の登録処理
-      }
-    };
+      });
+    })
+    .then(() => {
+      // 成功後、入力フィールドをリセット
+      setValue("");
+      console.log(`${selectedTab === 'income' ? '収入' : '支出'}200が登録されました:`, value);
+    })
+    .catch((error) => {
+      console.error('Error handling transaction:', error);
+    });
+  };
 
     return(     
         <PaperProvider>
@@ -284,61 +105,40 @@ const Registration = ():JSX.Element => {
               {errorMessage}
             </Snackbar>
             <View style={styles.mainContents}>
-                <View style={styles.content}>
-                  <View
-                    style={{ width: 300 }}
-                  >
+                <View style={styles.contentBox}>
                     <SegmentedButtons
+                      style={styles.segmentedButtons}
                       value={selectedTab}
                       onValueChange={setSelectedTab}
                       buttons={[
-                        { value: 'income', label: '収入' },
-                        { value: 'expense', label: '支出' },
+                        {
+                          value: 'income',
+                          label: '収入',
+                          style: selectedTab === 'income' ? styles.selectedButton : styles.button,  // 選択された時のスタイルと通常時のスタイルを分ける
+                          labelStyle: styles.label,   // 文字のスタイル
+                        },
+                        {
+                          value: 'expense',
+                          label: '支出',
+                          style: selectedTab === 'expense' ? styles.selectedButton : styles.button,  // 選択された時のスタイル
+                          labelStyle: styles.label,   // 文字のスタイル
+                        },
                       ]}
                     />
                     <View style={styles.inputContainer}>
-                      {/* <Text style={styles.label}>
-                        {selectedTab === 'income' ? '収入を入力' : '支出を入力'}
-                      </Text> */}
                       <TextInput
                         style={styles.input}
                         value={value}
                         onChangeText={setValue}
                         placeholder="¥"
+                        placeholderTextColor="#7F7F86"  // プレースホルダーの色を赤に設定
                         keyboardType="numeric"
+                        inputAccessoryViewID="globalAccessoryID"  // InputAccessoryViewと関連付け
                       />
-                      <SmallButton onPress={() => { handlePress() }} label='登録' />
+                      <LargeButton onPress={() => { handlePress() }} label='登録' width={48} fontSize={12} />
+                      <KeyboardAccessory />
                     </View>
-                  </View>
-                  {/* <Text style={styles.contentTitle}>収入実績</Text>
-                  <View style={styles.incomeActualBox}>
-                    <View style={styles.row}>
-                      <TextInput
-                          style={styles.incomeActualInput}
-                          value={incomeActual.toString()}
-                          onChangeText={(text) => { setIncomeActual(Number(text)) }}
-                          placeholder="¥"
-                          keyboardType="numeric"  // 追加: 数値入力用のキーボードを表示
-                      />
-                      <SmallButton onPress={() => { handlePressIncomeActual() }} label='登録' />
-                    </View>
-                  </View> */}
                 </View>
-                {/* <View style={styles.content}> */}
-                  {/* <Text style={styles.contentTitle}>支出実績</Text>
-                  <View style={styles.expenditureActualBox}>
-                    <View style={styles.row}>
-                      <TextInput
-                          style={styles.expenditureActualInput}
-                          value={expenditureActual.toString()}
-                          onChangeText={(text) => { setExpenditureActual(Number(text)) }}
-                          placeholder="¥"
-                          keyboardType="numeric"  // 追加: 数値入力用のキーボードを表示
-                      />
-                      <SmallButton onPress={() => { handlePressExpenditureActual() }} label='登録' />
-                    </View>
-                  </View> */}
-                {/* </View> */}
               </View>
             </View>
             <Footer />
@@ -349,86 +149,57 @@ const Registration = ():JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex:1, //画面いっぱいに要素を広げる
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F2F1F6',
   },
   mainContents: {
     alignItems: 'center'
   },
-  content: {
+  contentBox: {
     marginTop: 24,
+    width: 352,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    padding: 16
   },
   contentTitle: {
     marginLeft: 8,
     fontSize: 12,
     lineHeight: 16
   },
-  row: {
-    flexDirection: 'row',  // 子要素を横並びにする
+  segmentedButtons: {
+    width: 152,
+    height: 32,
+    fontSize: 8,
+    alignItems: 'center',       // ボタン内のコンテンツの水平配置
   },
-incomeActualInput: {
-    textAlign: 'left',
-    height: 24,
-    padding: 4,
-    width: 120,
-    borderRadius: 8,
-    backgroundColor:'#ffffff'
+  button: {
+    height: 32,                // ボタンの高さ
+    paddingVertical: 0,         // ボタンの上下のパディングを調整
+    justifyContent: 'center',   // 垂直方向に中央揃え
+    backgroundColor: '#ffffff',  // 選択時の背景色
   },
-  incomeActualBox: {
-    width: 168,
-    height: 48,
-    backgroundColor:"#D9D9D9",
-    paddingLeft: 8,
-    paddingVertical: 12,
-    marginRight: 16,
-    borderRadius: 8,
-    /* shadow */
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  expenditureActualInput: {
-    textAlign: 'left',
-    height: 24,
-    padding: 4,
-    width: 120,
-    borderRadius: 8,
-    backgroundColor:'#ffffff'
-  },
-  expenditureActualBox: {
-    width: 168,
-    height: 48,
-    backgroundColor:"#D9D9D9",
-    paddingLeft: 8,
-    paddingVertical: 12,
-    borderRadius: 8,
-    /* shadow */
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  inputContainer: {
-    marginTop: 20,
+  selectedButton: {
+    height: 32,                // ボタンの高さ
+    paddingVertical: 0,         // ボタンの上下のパディングを調整
+    justifyContent: 'center',   // 垂直方向に中央揃え
+    backgroundColor: '#FFC30F',  // 選択時の背景色
   },
   label: {
-    marginBottom: 10,
-    fontSize: 16,
+    fontSize: 12,               // 文字の大きさ
+    lineHeight: 13,             // 行の高さ (文字が隠れないように)
+  },
+  inputContainer: {
+    flexDirection: 'row',  // 子要素を横並びにする,
+    marginTop: 44,
   },
   input: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginBottom: 20,
+    backgroundColor: '#E3E3EA',
+    borderRadius: 8,
+    width: 152,
+    height: 32,
     fontSize: 18,
-    padding: 5,
+    marginRight: 120,
+    padding: 8,
   },
 })
 

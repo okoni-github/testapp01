@@ -7,16 +7,30 @@ import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-import { auth } from '../../config'
+import { auth, db } from '../../config'
 import Button from '../../components/Button';
+import { doc, setDoc, Timestamp } from 'firebase/firestore';
 
 const handlePress = (email: string, password: string): void => {
     // 会員登録
     createUserWithEmailAndPassword(auth, email, password)
         // 成功
-        .then((userCredential) => {
-            console.log(userCredential.user.uid)
-            router.replace('/memo/List') //メモリスト画面へ遷移
+        .then(() => {
+            // const user = userCredential.user;
+            if (auth.currentUser === null) { return }
+            const isRegisteredRef = doc(db, `users/${auth.currentUser.uid}/isRegistered`, 'isRegisteredId');
+            setDoc(isRegisteredRef, {
+                isRegistered: false,
+                updatedAt: Timestamp.fromDate(new Date())
+            })
+            .then(() => {
+                router.replace('/UserRegistration/UserRegistration');
+                if (auth.currentUser === null) { return }
+                console.log("Firestoreにユーザー情報を保存しました", auth.currentUser.uid);
+            })
+            .catch((error) => {
+                console.error("Firestoreにユーザー情報を保存できませんでした:", error);
+            });
         })
         // 失敗
         .catch((error) => {

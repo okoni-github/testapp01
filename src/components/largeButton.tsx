@@ -5,14 +5,15 @@ import { Text, TouchableOpacity, StyleSheet } from "react-native";
 interface Props{
     label: string
     width?: number
+    fontSize?: number
     onPress?: () => void
 }
 
 const LargeButton = (props:Props):JSX.Element => {
-    const { label, width, onPress } = props
+    const { label, width, fontSize, onPress } = props
     return(
         <TouchableOpacity onPress={onPress} style={styles.largeButton}>
-            <Text style={[styles.largeButtonlabel, width ? { width } : {}]}>{label}</Text>
+            <Text style={[styles.largeButtonlabel, width ? { width } : {}, fontSize ? { fontSize} : {}]}>{label}</Text>
         </TouchableOpacity>
     )
 }
@@ -20,9 +21,6 @@ const LargeButton = (props:Props):JSX.Element => {
 const styles = StyleSheet.create({
   largeButton: {
     backgroundColor: "#FFC30F",
-    // width: 48,
-    height: 24,
-    marginLeft: 8,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center'

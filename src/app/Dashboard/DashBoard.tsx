@@ -4,28 +4,26 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
+  // Dimensions,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 
 import { doc, onSnapshot } from 'firebase/firestore';
-import { useNavigation } from 'expo-router';
-import { LineChart } from 'react-native-chart-kit';
+// import { LineChart } from 'react-native-chart-kit';
 
 import { auth, db } from '../../config'
 import Footer from '../Footer';
-import LogOutButton from '../../components/LogOutButton';
-import AccountButton from '../../components/AccountButton';
 import { AssetTrendsData } from '@/types/AssetTrendsData';
 
 // import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
-// import mobileAds from "react-native-google-mobile-ads";
-// import useAdmob from '../hooks/use-admob';
+// import mobileAds, { BannerAdSize, GAMBannerAd, TestIds } from "react-native-google-mobile-ads";
+// import rewardedAd from '../hooks/rewardedAd';
 
 const DashBoard = ():JSX.Element => {
-  const [selectedData, setSelectedData] = useState(null);
+
+  // const [selectedData, setSelectedData] = useState<null | DataPoint>(null);
   const [assetTrendsData, setAssetTrendsData] = useState<AssetTrendsData>({
     labels: ['0'],
     datasets: [
@@ -34,8 +32,6 @@ const DashBoard = ():JSX.Element => {
       }
     ]
   });
-
-  // const { loadRewarded } = useAdmob();
 
   // useEffect(() => {
   //   (async () => {
@@ -51,22 +47,21 @@ const DashBoard = ():JSX.Element => {
   //   })();
   // }, []);
 
-  const navigation = useNavigation()
-  // 画面表示の際に一度だけログアウトボタンを表示する
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => { return <LogOutButton /> },
-      headerLeft: () => { return <AccountButton /> }
-    })
-  }, [])
+  // const navigation = useNavigation()
+  // // 画面表示の際に一度だけログアウトボタンを表示する
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => { return <LogOutButton /> },
+  //     headerLeft: () => { return <AccountButton /> }
+  //   })
+  // }, [])
 
 useEffect(() => {  
   if (auth.currentUser === null) { return }
 
-  // 特定のドキュメントを監視
+  // assetTrendsDataの監視
   const ref = doc(db, `users/${auth.currentUser.uid}/assetTrendsData`, 'assetTrendsDataId');
 
-  // assetTrendsDataの監視
   const unsubscribe = onSnapshot(ref, (doc) => {
 
     if (doc.exists()) {
@@ -90,9 +85,7 @@ useEffect(() => {
 
   }, []);
 
-  const screenWidth = Dimensions.get('window').width;
-
-
+  // const screenWidth = Dimensions.get('window').width;
 
 // ラベルを均等に間引く関数
 function filterLabelsEvenly(labels: string[], startAge: number, totalLabels: number = 7): string[] {
@@ -131,99 +124,148 @@ console.log(filteredLabels);
 //   return `${value}円`; // 1万未満
 // };
 
-// チャートデータを作成
-const chartData = {
-  labels: filteredLabels, // 均等に間引いたラベルを使用
-  datasets: [
-    {
-      data: assetTrendsData.datasets[0].data // 数値のまま保持
-    }
-  ]
-};
+// // チャートデータを作成
+// const chartData = {
+//   labels: filteredLabels, // 均等に間引いたラベルを使用
+//   datasets: [
+//     {
+//       data: assetTrendsData.datasets[0].data // 数値のまま保持
+//     }
+//   ]
+// };
+
+// // データセットの型を定義
+// interface Dataset {
+//   data: number[];
+//   color?: (opacity: number) => string;
+// }
+
+// // データポイントの型定義を追加
+// interface DataPoint {
+//   index: number;
+//   value: number;
+//   dataset: Dataset;
+//   x: number;
+//   y: number;
+//   getColor: (opacity: number) => string;
+// }
+
+// const chartData = {
+//   labels: filteredLabels, // 例: ["January", "February", ...] または ["1", "2", "3", ...]
+//   datasets: [
+//     {
+//       label: 'Wallet (実績)',
+//       data: [1000000, 1050000, 1100000, 1150000], // 財布の実績データ
+//       color: (opacity = 1) => `rgba(63, 81, 181, ${opacity})`, // 実績データの色
+//       strokeWidth: 2, // 線の太さ
+//     },
+//     {
+//       label: 'Wallet (予測)',
+//       data: [1020000, 1070000, 1120000, 1170000], // 財布の予測データ
+//       color: (opacity = 1) => `rgba(63, 81, 181, ${opacity * 0.5})`, // 予測データの色（薄め）
+//       strokeWidth: 2,
+//     },
+//     {
+//       label: 'Bank Account (実績)',
+//       data: [2000000, 2050000, 2100000, 2150000], // 銀行口座の実績データ
+//       color: (opacity = 1) => `rgba(0, 150, 136, ${opacity})`, // 銀行口座実績データの色
+//       strokeWidth: 2,
+//     },
+//     {
+//       label: 'Bank Account (予測)',
+//       data: [2020000, 2070000, 2120000, 2170000], // 銀行口座の予測データ
+//       color: (opacity = 1) => `rgba(0, 150, 136, ${opacity * 0.5})`, // 予測データの色（薄め）
+//       strokeWidth: 2,
+//     }
+//   ]
+// };
+
+  // // テスト用のID
+  // // 実機テスト時に誤ってタップしたりすると、広告の配信停止をされたりするため、テスト時はこちらを設定する
+  // const unitId = TestIds.BANNER;
+
+  // // 実際に広告配信する際のID
+  // // 広告ユニット（バナー）を作成した際に表示されたものを設定する
+  // const adUnitID = Platform.select({
+  //   ios: "ca-app-pub-2591881801621460/8428923504",
+  //   android: "ca-app-pub-2591881801621460/6275471257",
+  //   default: TestIds.BANNER, // デフォルト値としてテスト用のIDを設定
+  // });
+
+  // const handleReward = (reward:{ type: string; amount: number }) => {
+  //   console.log("ユーザーに報酬を加算しました！", reward);
+  //   // ここでポイント加算や他の処理を実施
+  // };
+
+  // const { loadRewarded } = rewardedAd(handleReward); // フックにコールバックを渡す
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.mainContents}>
           <ScrollView style={styles.content}>
-            <Text
-              style={styles.contentTitle}
-              // onPress={loadRewarded}
-              >資産推移</Text>
-            {/* <View style={styles.assetSimulationBox}> */}
-              {/* <View style={styles.innerBox}> */}
-                {/* <ScrollView horizontal> */}
-                  <LineChart
-                    data={chartData}
-                    width={screenWidth}
-                    height={208}
-                    yAxisLabel=""
-                    yAxisSuffix="円"
-                    // yLabels={assetTrendsData.datasets[0].data.map(formatYAxisLabels)}
-                    yAxisInterval={1}  // Y軸の間隔
-                    fromZero={true}    // Y軸の最小値を0にする
-                    chartConfig={{
-                      backgroundColor: '#ffffff',
-                      backgroundGradientFrom: '#ffffff',
-                      backgroundGradientTo: '#ffffff',
-                      decimalPlaces: 0,  // 小数点以下を表示しない
-                      color: (opacity = 1) => `rgba(255, 195, 15, ${opacity})`,
-                      labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                      style: {
-                        borderRadius: 16
-                      },
-                      propsForDots: {
-                        r: '4',
-                        strokeWidth: '2',
-                        stroke: '#ffa726'
-                      },
-                      propsForLabels: {
-                        fontSize: 10,  // フォントサイズを小さく設定
-                      },
-                    }}
-                    bezier
-                    onDataPointClick={(data) => {
-                      setSelectedData(data); // タップしたデータポイントの情報を設定
-                    }}
-                    style={{
-                      // marginVertical: 8,
-                      // borderRadius: 16
-                    }}
-                  />
-                  {selectedData && (
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: selectedData.y - 25,
-                        left: selectedData.x - 40,
-                        // backgroundColor: '#FFC30F',
-                        // borderColor: '#e26a00',
-                        backgroundColor: '#ffffff',
-                        borderColor: '#e26a00',
-                        borderRadius: 5,
-                        borderWidth: 1,
-                        padding: 5,
-                        elevation: 5,
-                      }}
-                    >
-                      <Text style={{
-                        color: '#e26a00',
-                      }}>{`${selectedData.value.toLocaleString()}円`}</Text>
-                    </View>
-                  )}
-                {/* </ScrollView> */}
-              {/* </View> */}
-            {/* </View> */}
+            <Text style={styles.contentTitle}>資産推移</Text>
+            {/* <View>
+              <GAMBannerAd
+                unitId={unitId}
+                sizes={[BannerAdSize.ANCHORED_ADAPTIVE_BANNER]}
+              />
+            <Text onPress={loadRewarded}>リワード広告テスト</Text>
+            </View> */}
+            {/* <LineChart
+              data={chartData}
+              width={screenWidth}
+              height={208}
+              yAxisLabel=""
+              yAxisSuffix="円"
+              yAxisInterval={1}  // Y軸の間隔
+              fromZero={true}    // Y軸の最小値を0にする
+              chartConfig={{
+                backgroundColor: '#ffffff',
+                backgroundGradientFrom: '#ffffff',
+                backgroundGradientTo: '#ffffff',
+                decimalPlaces: 0,  // 小数点以下を表示しない
+                color: (opacity = 1) => `rgba(255, 195, 15, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                style: {
+                  borderRadius: 16
+                },
+                propsForDots: {
+                  r: '4',
+                  strokeWidth: '2',
+                  stroke: '#ffa726'
+                },
+                propsForLabels: {
+                  fontSize: 10,  // フォントサイズを小さく設定
+                },
+              }}
+              bezier
+              onDataPointClick={(data: DataPoint) => {
+                setSelectedData(data); // タップしたデータポイントの情報を設定
+              }}
+            />
+            {selectedData && (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: selectedData.y - 25,
+                  left: selectedData.x - 40,
+
+                  backgroundColor: '#ffffff',
+                  borderColor: '#e26a00',
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  padding: 5,
+                  elevation: 5,
+                }}
+              >
+                <Text style={{
+                  color: '#e26a00',
+                }}>{`${selectedData.value.toLocaleString()}円`}</Text>
+              </View>
+            )} */}
           </ScrollView> 
         </View>
-        {/* <View>
-          <AdMobBanner
-            bannerSize="fullBanner"
-            adUnitID={__DEV__ ? 'ca-app-pub-3940256099942544/6300978111' : 'ca-app-pub-2591881801621460/8428923504'} // テスト環境ではTest IDを使用、本番環境では実際のIDに変更
-            servePersonalizedAds // 個別の広告を配信する場合はtrue
-            onDidFailToReceiveAdWithError={(error) => console.error(error)}
-          />
-        </View> */}
         <Footer />
       </View>
     </TouchableWithoutFeedback>

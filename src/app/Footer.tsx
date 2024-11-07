@@ -39,24 +39,9 @@ const Footer = (): JSX.Element => {
 }
 
 const styles = StyleSheet.create({
-    // comingSoon: {
-    //     position: 'absolute',
-    //     top: '15%',
-    //     right: '18%',
-    //     borderRadius: 8,
-    //     width: 240,
-    //     height: 40,
-    //     zIndex: 100,
-    //     textAlign: 'center',
-    //     justifyContent: 'center',
-    //     fontSize: 24,
-    //     fontWeight: 'bold',
-    //     paddingTop: 4,
-    //     color: '#FFC30F',
-    //     backgroundColor: '#ffffff',
-    // },
     footer: {
         width: '100%',
+        // alignContent: 'flex-end',
         position: 'absolute',
         bottom: 0,
         height: 88,

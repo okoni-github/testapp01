@@ -8,34 +8,73 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword, getAuth, signInAnonymously } from 'firebase/auth';
 
 import Button from '../../components/Button';
-import { auth } from '../../config';
+import { auth, db } from '../../config';
+import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 
 const handlePress = (email: string, password: string): void => {
     // ログイン
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            console.log(userCredential.user.uid)
-            router.replace('/Dashboard/DashBoard') //ダッシュボード画面へ遷移
+        .then(() => {
+            if (auth.currentUser === null) { return }
+            const isRegisteredRef = doc(db, `users/${auth.currentUser.uid}/isRegistered`, 'isRegisteredId');
+            getDoc(isRegisteredRef)
+                .then((docSnapshot) => {
+                    if (docSnapshot.exists() && docSnapshot.data()?.isRegistered) {
+                        router.replace('/Dashboard/DashBoard'); // ダッシュボード画面へ遷移
+                    } else {
+                        router.replace('/UserRegistration/UserRegistration'); // ユーザー登録画面へ遷移
+                    }
+                })
+                .catch((error) => {
+                    console.error("ユーザーデータの取得に失敗しました:", error);
+                    Alert.alert("データ取得に失敗しました");
+                });
         })
         .catch((error) => {
-            const { code, message } = error
-            console.log(code, message)
-            Alert.alert(message)
-        })
+            const { code, message } = error;
+            console.log(code, message);
+            Alert.alert(message);
+        });
 }
 
 const gestHandlePress = (): void => {
-    console.log('hello!')
     const getauth = getAuth();
-        signInAnonymously(getauth)
-            .then((userCredential) => {
-            console.log(userCredential.user.uid)
-            router.replace('/Dashboard/DashBoard') //ダッシュボード画面へ遷移
-            })
-            .catch((error) => {
-                console.log(error)
-                Alert.alert('ログインに失敗しました')
-            });
+    signInAnonymously(getauth)
+        .then((userCredential) => {
+            const uid = userCredential.user.uid;
+            console.log(uid);
+            const userDocRef = doc(db, `users/${uid}`);
+            if (auth.currentUser === null) { return }
+            const isRegisteredRef = doc(db, `users/${auth.currentUser.uid}/isRegistered`, 'isRegisteredId');
+            setDoc(isRegisteredRef, {
+                isRegistered: false,
+                updatedAt: Timestamp.fromDate(new Date())
+            }, { merge: true })
+                .then(() => {
+                    console.log("初期データをFirestoreに登録しました");
+                    getDoc(userDocRef)
+                        .then((docSnapshot) => {
+                            console.log(docSnapshot)
+                            if (docSnapshot.exists() && docSnapshot.data()?.isRegistered) {
+                                router.replace('/Dashboard/DashBoard'); // ダッシュボード画面へ遷移
+                            } else {
+                                router.replace('/UserRegistration/UserRegistration'); // ユーザー登録画面へ遷移
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("ユーザーデータの取得に失敗しました:", error);
+                            Alert.alert("データ取得に失敗しました");
+                        });
+                })
+                .catch((error) => {
+                    console.error("初期データの登録に失敗しました:", error);
+                    Alert.alert("データ登録に失敗しました");
+                });
+        })
+        .catch((error) => {
+            console.log(error);
+            Alert.alert('ログインに失敗しました');
+        });
 }
 
 const LogIn = ():JSX.Element => {
