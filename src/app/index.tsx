@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { Redirect, router } from "expo-router";
 import { onAuthStateChanged } from 'firebase/auth';
@@ -12,6 +13,7 @@ const Index = (): JSX.Element => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        // router.replace('/Dashboard/DashBoard');
         // const userDocRef = doc(db, 'users', user.uid);
         if (auth.currentUser === null) { return }
         const isRegisteredRef = doc(db, `users/${auth.currentUser.uid}/isRegistered`, 'isRegisteredId');
