@@ -138,21 +138,21 @@ const chartData = {
   ]
 };
 
-// // データセットの型を定義
-// interface Dataset {
-//   data: number[];
-//   color?: (opacity: number) => string;
-// }
+// データセットの型を定義
+interface Dataset {
+  data: number[];
+  color?: (opacity: number) => string;
+}
 
-// // データポイントの型定義を追加
-// interface DataPoint {
-//   index: number;
-//   value: number;
-//   dataset: Dataset;
-//   x: number;
-//   y: number;
-//   getColor: (opacity: number) => string;
-// }
+// データポイントの型定義を追加
+interface DataPoint {
+  index: number;
+  value: number;
+  dataset: Dataset;
+  x: number;
+  y: number;
+  getColor: (opacity: number) => string;
+}
 
 // const chartData = {
 //   labels: filteredLabels, // 例: ["January", "February", ...] または ["1", "2", "3", ...]
